@@ -1,0 +1,39 @@
+{
+  "name": "roster-challenge",
+  "version": "1.0.0",
+  "description": "roster challenge",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server",
+    "build": "rm -rf dist && NODE_ENV=development webpack",
+    "watch": "yarn build && webpack-dev-server"
+  },
+  "dependencies": {
+    "react": "16.13.0",
+    "react-dom": "16.13.0",
+    "react-router-dom": "5.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.10.4",
+    "@babel/core": "7.10.4",
+    "@babel/plugin-proposal-class-properties": "7.10.4",
+    "@babel/plugin-syntax-dynamic-import": "7.8.3",
+    "@babel/plugin-syntax-object-rest-spread": "7.8.3",
+    "@babel/plugin-transform-classes": "7.10.4",
+    "@babel/plugin-transform-runtime": "7.10.4",
+    "@babel/preset-env": "7.10.4",
+    "@babel/preset-react": "7.10.4",
+    "@babel/runtime": "7.10.4",
+    "autoprefixer": "9.8.5",
+    "babel-loader": "8.1.0",
+    "css-loader": "3.6.0",
+    "html-webpack-plugin": "^4.3.0",
+    "mini-css-extract-plugin": "0.9.0",
+    "postcss-loader": "3.0.0",
+    "sass": "^1.26.10",
+    "sass-loader": "9.0.2",
+    "webpack": "4.43.0",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.0"
+  }
+}
