@@ -1,10 +1,24 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { fetchShifts, fetchEmployees, updateShifts } = require('./api');
 
 module.exports = {
   mode: 'development',
   entry: './src/index.jsx',
+  devServer: {
+    historyApiFallback: true,
+    // noInfo: true,
+    // overlay: true,
+    before:(app) => {
+      var bodyParser = require('body-parser');    
+      app.use(bodyParser.json());
+      console.log('before hi');
+      app.get('/api/shifts', fetchShifts);
+      app.get('/api/employees', fetchEmployees);
+      app.put('/api/shifts/update', bodyParser.json(), updateShifts);
+    }
+  },
   output: {
     publicPath: './dist/',
     filename: 'bundle.js',

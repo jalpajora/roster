@@ -9,6 +9,7 @@
     "watch": "yarn build && webpack-dev-server"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "react": "16.13.0",
     "react-dom": "16.13.0",
     "react-router-dom": "5.2.0"
