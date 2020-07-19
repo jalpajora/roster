@@ -1,4 +1,55 @@
 body {
+  background: #fafafa;
+  height: 100vh;
   font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
   margin: 0;
+}
+
+.MuiToolbar-root {
+  background-color: #62757f;
+}
+
+.app__main {
+  margin: 1rem;
+}
+.app__main h1 {
+  margin: 0 auto;
+}
+
+.table__wrapper {
+  margin: 2rem auto;
+  width: 900px;
+}
+.table__wrapper table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  border: 1px solid #eceff1;
+}
+.table__wrapper table th {
+  background-color: #e3f2fd;
+  background: #e2f1f8;
+  color: #000;
+  font-weight: 400;
+}
+.table__wrapper table th,
+.table__wrapper table td {
+  border-bottom: 1px solid #eceff1;
+  padding: 0.25rem;
+}
+.table__wrapper table td {
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+}
+
+.employee-role__Supervisor {
+  background-color: #b2dfdb;
+}
+
+.employee-role__Checkouts {
+  background-color: #c8e6c9;
+}
+
+.employee-role__Stacker {
+  background-color: #ce93d8;
 }

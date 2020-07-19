@@ -17,9 +17,11 @@ export function useFetchApi(endpoint = '') {
       return;
     }
 
-    fetchApi(endpoint)
-      .then((data) => setResponse(data));
-  }, [endpoint]);
+    if (!response.length) {
+      fetchApi(endpoint)
+        .then((data) => setResponse(data));
+    }
+  }, [endpoint, response]);
 
   return [response];
 }

@@ -1,7 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { fetchShifts, fetchEmployees, updateShifts } = require('./api');
+const { fetchShifts, fetchEmployees, updateShifts, fetchRoles } = require('./api');
 
 module.exports = {
   mode: 'development',
@@ -11,9 +11,9 @@ module.exports = {
     // noInfo: true,
     // overlay: true,
     before:(app) => {
-      var bodyParser = require('body-parser');    
-      app.use(bodyParser.json());
-      console.log('before hi');
+      var milliseconds = new Date().getTime();
+      var bodyParser = require('body-parser');   
+      app.get('/api/roles', fetchRoles); 
       app.get('/api/shifts', fetchShifts);
       app.get('/api/employees', fetchEmployees);
       app.put('/api/shifts/update', bodyParser.json(), updateShifts);

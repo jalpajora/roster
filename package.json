@@ -6,9 +6,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
     "build": "rm -rf dist && NODE_ENV=development webpack",
-    "watch": "yarn build && webpack-dev-server"
+    "watch": "yarn build && yarn start"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "body-parser": "^1.19.0",
     "react": "16.13.0",
     "react-dom": "16.13.0",

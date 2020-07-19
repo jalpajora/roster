@@ -1,71 +1,72 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { getWeekDay, getTime, getShiftSchedule } from '../../helpers/dateFormatter';
-import { DAYS, SHIFT_SCHEDULE } from './constants';
-
-function formatSchedule(shifts, timeZone) {
-  const groupedByEmployeeId = shifts.reduce((reformat, shift, shiftId) => {
-    const weekDay = getWeekDay(shift.start_time, timeZone);
-    reformat[weekDay] = reformat[weekDay] || {};
-
-    if (!reformat[weekDay][shift.employee_id]) {
-      reformat[weekDay][shift.employee_id] = {...shift, shiftId};
-    }
-
-    return reformat;
-  }, {});
-
-  return groupedByEmployeeId;
-}
+import { formatSchedule, getShiftForTheDay } from '../../helpers/formatter';
+import { DAYS } from './constants';
 
 const EmployeeColumn = ({ employee }) => {
-  const { last_name, first_name} = employee;
-  return <td>{`${last_name}, ${first_name}`}</td>;
+  const { last_name, first_name, id } = employee;
+  return <td data-id={id}>{`${last_name}, ${first_name}`}</td>;
 };
 
-const EmployeeScheduleColumn = ({ schedule, timeZone }) => {
+const EmployeeScheduleColumn = ({ schedule, timeZone, day, scheduleForAll, roles }) => {
   const Edit = () => (
     <Link to={{
       pathname: '/edit',
+      scheduleForAll,
+      day,
       schedule,
-      timeZone
+      timeZone,
     }}>Edit</Link>
   );
 
-  const WorkOff = () => <td className='schedule-legend--off'><Edit /></td>;
+  const WorkOff = () => <td className='schedule-legend--off'></td>;
   if (!schedule) {
     return <WorkOff />;
   }
 
-  const startDate = getTime(schedule.start_time, timeZone);
-  // const endDate = getTime(schedule.end_time, timeZone);
-  const shift = getShiftSchedule(startDate, SHIFT_SCHEDULE);
+  const shift = getShiftForTheDay(schedule.start_time, timeZone);
   if (shift === '') {
     return <WorkOff />;
   }
 
+  const getRole = () => {
+    const filterRole = roles.filter(role => role.id === schedule.role_id);
+    if (filterRole.length) {
+      return filterRole[0].name;
+    }
+
+    return '';
+  };
+
   return (
-    <td className={`schedule-legend--working${shift}`}>
-      <span>{shift}</span>
+    <td
+      className={`schedule-legend--working${shift} employee-role__${getRole()}`}
+    >
+      <div>{shift}</div>
       <Edit />
     </td>
   );
 }
 
-const ScheduleColumns = ({ schedule, employeeId, timeZone }) => {
-  return DAYS.map((day, index) => {
-    return (
-      <EmployeeScheduleColumn 
-        key={`employee-schedule-${employeeId}-${index}`}
-        schedule={schedule[day][employeeId]}
-        timeZone={timeZone}
-      />
-    );
-  });
-};
 
-function EmployeeSchedule({ employees, schedule, timeZone }) {
+
+function EmployeeSchedule({ employees, schedule, timeZone, roles }) {
+  const ScheduleColumns = ({ schedule, employeeId, timeZone }) => {
+    return DAYS.map((day, index) => {
+      return (
+        <EmployeeScheduleColumn 
+          key={`employee-schedule-${employeeId}-${index}`}
+          schedule={schedule[day][employeeId]}
+          timeZone={timeZone}
+          day={day}
+          scheduleForAll={schedule}
+          roles={roles}
+        />
+      );
+    });
+  };
+
   return employees.map(employee => (
     <tr key={`employee-schedule-${employee.id}`}>
       <EmployeeColumn employee={employee} />
@@ -73,6 +74,7 @@ function EmployeeSchedule({ employees, schedule, timeZone }) {
         employeeId={employee.id}
         schedule={schedule}
         timeZone={timeZone}
+        roles={roles}
       />
     </tr>
   ));
@@ -81,23 +83,28 @@ function EmployeeSchedule({ employees, schedule, timeZone }) {
 export const Schedule = ({
   shifts,
   employees,
+  roles,
   timeZone = 'Australia/Perth' // TODO: fetch this
 }) => {
+  if (!shifts.length) {
+    return null;
+  }
   const schedule = formatSchedule(shifts, timeZone);
-
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Employee</th>
-          {DAYS.map(day => <th key={`table-column-${day.toLowerCase()}`}>{day}</th>)}
-          <th>Edit</th>
-        </tr>
-      </thead>
-      <tbody>
-        <EmployeeSchedule employees={employees} schedule={schedule} timeZone={timeZone} />
-      </tbody>
-    </table>
+    <div className='table__wrapper'>
+      <table cellSpacing='0' cellPadding='0'>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            {DAYS.map(day => <th key={`table-column-${day.toLowerCase()}`}>{day}</th>)}
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <EmployeeSchedule employees={employees} schedule={schedule} timeZone={timeZone} roles={roles}/>
+        </tbody>
+      </table>
+    </div>
   );
 };
 
